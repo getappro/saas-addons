@@ -34,11 +34,11 @@ class SaasDb(models.Model):
                 ["code"],
             )
         )
-        if not is_admin_language_installed:
-            lang_install_id = self.execute_kw(
-                "base.language.install", "create", {"lang": self.admin_user.lang, "overwrite": False}
-            )
-            self.execute_kw("base.language.install", "lang_install", lang_install_id)
+        #if not is_admin_language_installed:
+        #   lang_install_id = self.execute_kw(
+        #      "base.language.install", "create", {"lang": self.admin_user.lang, "overwrite": False}
+        #   )
+        #   self.execute_kw("base.language.install", "lang_install", lang_install_id)
 
         vals = {}
 
