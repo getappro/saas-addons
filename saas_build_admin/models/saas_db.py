@@ -42,10 +42,10 @@ class SaasDb(models.Model):
 
         vals = {}
 
-        if self.admin_user.lang:
-            vals["lang"] = self.admin_user.lang
-        else:
-            vals["lang"] = "en_US"
+        #if self.admin_user.lang:
+        #    vals["lang"] = self.admin_user.lang
+        #else:
+        #    vals["lang"] = "en_US"
 
         if self.admin_user.country_id:
             res = self.execute_kw(
