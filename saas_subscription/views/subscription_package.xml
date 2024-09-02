@@ -29,12 +29,12 @@
                     <field name="is_saas" attrs="{'readonly': 1}"/>
             </xpath>
             <xpath expr="//field[@name='next_invoice_date']" position='after'>
-                <field name="expiration_date" attrs="{'invisible': ['|',('stage_category','!=', 'progress'),('is_saas','!=',True)]}"/>
+                <field name="expiration_date" attrs="{'invisible': [('is_saas','!=',True)]}"/>
             </xpath>
             <xpath expr="//field[@name='company_id']" position="after">
-                <field name="subdomain" attrs="{'invisible': ['|',('stage_category','!=', 'progress'),('is_saas','!=',True)]}"/>
-                <field name="operator_id" attrs="{'invisible': ['|',('stage_category','!=', 'progress'),('is_saas','!=',True)]}"/>
-                <field name="template_operator_id" attrs="{'invisible': ['|',('stage_category','!=', 'progress'),('is_saas','!=',True)]}"/>
+                <field name="subdomain" attrs="{'invisible': [('is_saas','!=',True)]}"/>
+                <field name="operator_id" attrs="{'invisible': [('is_saas','!=',True)]}"/>
+                <field name="template_operator_id" attrs="{'invisible': [('is_saas','!=',True)]}"/>
             </xpath>
         </field>
     </record>

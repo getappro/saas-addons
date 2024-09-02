@@ -18,12 +18,12 @@ class SubscriptionPackage(models.Model):
             .get_param("saas_expiration.number_of_days_for_trial", 7)
         )
 
-    is_saas = fields.Boolean(string='is SaaS', default=True)
+    is_saas = fields.Boolean(string='is SaaS', compute='_compute_is_saas')
     subdomain = fields.Char(string='Subdomain', store=True)
     operator_id = fields.Many2one('saas.operator', string='Operator')
     template_operator_id = fields.Many2one(
         'saas.template.operator',
-        'Template\'s Deployment', required=True,
+        'Template\'s Deployment', store=True,
         ondelete='cascade')
     build_count = fields.Integer(string='Sales', compute='_compute_build_count')
     expiration_date = fields.Datetime(
@@ -53,24 +53,10 @@ class SubscriptionPackage(models.Model):
                     self.is_saas = False
         return self.is_saas
 
-    def button_create_build(self):
-        """Button to create build"""
-        self.ensure_one()
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Create Build',
-            'res_model': 'saas.subscription.create_build',
-            'src_model': 'saas.template',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'view_id': self.env.ref('saas_subscription.saas_subscription_create_build').id,
-            'target': 'new',
-        }
-
     def _find_admin_user(self):
         admin = self.env['res.users'].search([('partner_id','=', self.partner_id.id)])
         if not admin:
-            raise ValidationError(_("This partner doesn't hove user. Please Create Portal User for the Partner"))
+            raise ValidationError(_("This partner doesn't have portal user. Please Create Portal User for the Partner"))
         return admin
 
     def _find_number_user(self):

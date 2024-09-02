@@ -6,7 +6,7 @@
     "summary": """This module helps to create saas related Subscription. For example subscribtion""",
     "category": "Sales",
     "images": [],
-    "version": "16.0.14.25.0",
+    "version": "16.0.15.1.0",
     "application": False,
     "author": "WAHBI ACHRAF GetapPRO",
     "support": "support@getap.pro",
