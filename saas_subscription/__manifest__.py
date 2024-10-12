@@ -1,34 +1,42 @@
-# Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License MIT (https://opensource.org/licenses/MIT).
 
 {
     "name": """SaaS: Subscription""",
-    "summary": """This module helps to create saas related Subscription. For example subscribtion""",
+    "summary": """This module manages subscription with SaaS clients""",
     "category": "Sales",
     "images": [],
-    "version": "16.0.15.1.0",
+    "version": "16.0.2.5.1",
     "application": False,
-    "author": "WAHBI ACHRAF GetapPRO",
-    "support": "support@getap.pro",
-    "license": "Other OSI approved licence",  # MIT
+
+    "author": "GetapPRO, ACHRAF",
+    "support": "achraf@getap.pro",
+    "website": "https://www.getap.pro/",
+    "license": "MIT",  # MIT
+
     "depends": [
-        "subscription_package",
-        "saas",
-        "saas_limit_max_users",
-        "saas_build_admin",
-        "saas_expiration"
+        "saas_expiration", "saas_limit_max_users", "contract", "saas_product", "subscription_oca",
     ],
     "data": [
-        "views/subscription_package.xml",
-        "views/saas_db_view.xml",
+        "views/sale_subscription_view.xml",
+        "views/saas_db_view.xml"
     ],
-    "demo": [],
-    "qweb": [],
+
     "post_load": None,
     "pre_init_hook": None,
     "post_init_hook": None,
     "uninstall_hook": None,
+
     "auto_install": False,
     "installable": True,
-}
 
+    # "demo_title": "SaaS: Contracts",
+    # "demo_addons": [
+    # ],
+    # "demo_addons_hidden": [
+    # ],
+    # "demo_url": "DEMO-URL",
+    # "demo_summary": "This module manages contracts with SaaS clients",
+    # "demo_images": [
+    #    "images/MAIN_IMAGE",
+    # ]
+}

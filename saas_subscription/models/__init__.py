@@ -1,2 +1,2 @@
-from . import subscription_package
+from . import sale_subscription
 from . import saas_db
