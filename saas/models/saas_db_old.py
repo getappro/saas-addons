@@ -3,6 +3,7 @@
 # Copyright 2020 Eugene Molotov <https://it-projects.info/team/em230418>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 from odoo import models, fields
+from odoo.exceptions import ValidationError
 
 
 class SAASDB(models.Model):
@@ -28,13 +29,23 @@ class SAASDB(models.Model):
     def create_db(self, template_db, demo, lang='en_US', callback_obj=None, callback_method=None):
         self.ensure_one()
         db_name = self.name + ".getaperp.com"
-        self.operator_id._create_db(template_db, db_name, demo, lang)
-        self.name = db_name
-        self.state = 'done'
-        self.env['saas.log'].log_db_created(self)
-        if callback_obj and callback_method:
-            getattr(callback_obj, callback_method)()
+        existing_db = [db[0] for db in self.list_databases()]
+        if db_name in existing_db:
+            raise ValidationError("Une base de données avec ce nom existe déjà.")
+        else:
+            self.operator_id._create_db(template_db, db_name, demo, lang)
+            self.name = db_name
+            self.state = 'done'
+            self.env['saas.log'].log_db_created(self)
+            if callback_obj and callback_method:
+                getattr(callback_obj, callback_method)()
 
+
+    def list_databases(self):
+        """Liste toutes les bases de données disponibles."""
+        # Remplacer 'your_postgresql_connection_string' par votre chaîne de connexion PostgreSQL
+        self.env.cr.execute("SELECT datname FROM pg_catalog.pg_database")
+        return self.env.cr.fetchall()
 
     def drop_db(self):
         for r in self:
