@@ -27,6 +27,7 @@ class SAASOperator(models.Model):
     template_operator_ids = fields.One2many('saas.template.operator', 'operator_id')
 
     build_count = fields.Integer(compute="_compute_build_count")
+    domain_build = fields.Char('Build Domain', required=True)
 
     def _compute_build_count(self):
         for record in self:
@@ -49,6 +50,7 @@ class SAASOperator(models.Model):
 
     def _create_db(self, template_db, db_name, demo, lang='en_US'):
         """Synchronous db creation"""
+        db_name = db_name + '.' + self.domain_build
         if not self:
             return
         elif self.type != 'local':

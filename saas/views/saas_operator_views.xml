@@ -24,6 +24,7 @@
                     <group>
                         <field name="name"/>
                         <field name="type"/>
+                        <field name="domain_build"/>
                         <field name="db_url_template"/>
                         <field name="global_url"/>
                     </group>
