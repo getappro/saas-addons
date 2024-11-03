@@ -11,14 +11,14 @@
     "author": "GetapPRO, ACHRAF",
     "support": "achraf@getap.pro",
     "website": "https://www.getap.pro/",
-    "license": "MIT",  # MIT
+    #"license": "GPL",  # MIT
 
     "depends": [
         "saas_expiration", "saas_limit_max_users", "contract", "saas_product", "subscription_oca",
     ],
     "data": [
         "views/sale_subscription_view.xml",
-        "views/saas_db_view.xml"
+        "views/saas_db_view.xml",
     ],
 
     "post_load": None,

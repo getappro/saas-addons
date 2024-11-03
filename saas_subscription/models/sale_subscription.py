@@ -1,11 +1,20 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import _, api, models, fields, SUPERUSER_ID
+from datetime import datetime, timedelta
 from odoo.exceptions import ValidationError
 
 class SaleSubscription(models.Model):
     _inherit = "sale.subscription"
     _description = "Subscription"
+
+    @api.model
+    def _get_number_of_days_for_trial(self):
+        return int(
+            self.sudo()
+            .env["ir.config_parameter"]
+            .get_param("saas_expiration.number_of_days_for_trial", 7)
+        )
 
     is_saas = fields.Boolean(string='is SaaS',compute='_compute_is_saas')
     subdomain = fields.Char(string='Subdomain', store=True)
@@ -51,7 +60,7 @@ class SaleSubscription(models.Model):
         db_name = self.subdomain
         key_value_dict = False
         existing_db = [db[0] for db in self.list_databases()]
-        build_name = db_name + ".getaperp.com"
+        build_name = db_name
         if build_name in existing_db:
             raise ValidationError("Une base de données avec ce nom existe déjà.")
         build = self.template_operator_id.sudo().create_db(key_value_dict, db_name)
