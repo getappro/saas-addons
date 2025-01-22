@@ -129,9 +129,31 @@ class SAASTemplateLine(models.Model):
 
     ], default='draft')
 
-    @api.model
     def unlink(self):
         for rec in self:
+            # Vérifier si la base est une template et a des builds associés
+            if rec.operator_db_id and rec.operator_db_id.type == 'template':
+                # Vous pouvez ajouter une vérification supplémentaire pour les builds
+                builds = self.env['saas.db'].search([
+                    ('type', '=', 'build'),
+                    ('template_operator_id', '=', rec.id)
+                ])
+
+                if builds:
+                    raise UserError(_(
+                        "Warning! You are about to delete the template database '%s'.\n"
+                        "This action will impact %d build(s) that depend on this template.\n"
+                        "This operation cannot be undone and may result in data loss.\n"
+                        "Are you sure you want to continue?" % (rec.operator_db_name, len(builds))
+                    ))
+                else:
+                    # Message d'avertissement même s'il n'y a pas de builds
+                    raise UserError(_(
+                        "Warning! You are about to delete the template database '%s'.\n"
+                        "This operation cannot be undone and may result in data loss.\n"
+                        "Are you sure you want to continue?" % rec.operator_db_name
+                    ))
+
             rec.operator_db_id.unlink()
         return super(SAASTemplateLine, self).unlink()
 
@@ -179,7 +201,7 @@ class SAASTemplateLine(models.Model):
             r.write({
                 'state': 'creating',
             })
-            r.env.cr.commit()
+            self.env.cr.flush()
             r.operator_db_id.with_delay().create_db(
                 None,
                 r.template_id.template_demo,

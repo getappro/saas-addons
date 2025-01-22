@@ -5,7 +5,7 @@
     "summary": """This module manages subscription with SaaS clients""",
     "category": "Sales",
     "images": [],
-    "version": "16.0.2.5.1",
+    "version": "17.0.2.5.1",
     "application": False,
 
     "author": "GetapPRO, ACHRAF",

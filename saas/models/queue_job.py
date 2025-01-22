@@ -6,5 +6,5 @@ class QueueJob(models.Model):
 
     def write(self, vals):
         res = super(QueueJob, self).write(vals)
-        self.env.cr.commit()
+        self.env.cr.flush()
         return res

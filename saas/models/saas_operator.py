@@ -27,7 +27,6 @@ class SAASOperator(models.Model):
     template_operator_ids = fields.One2many('saas.template.operator', 'operator_id')
 
     build_count = fields.Integer(compute="_compute_build_count")
-    domain_build = fields.Char('Build Domain', required=True)
 
     def _compute_build_count(self):
         for record in self:
@@ -50,7 +49,6 @@ class SAASOperator(models.Model):
 
     def _create_db(self, template_db, db_name, demo, lang='en_US'):
         """Synchronous db creation"""
-        db_name = db_name + '.' + self.domain_build
         if not self:
             return
         elif self.type != 'local':
@@ -67,7 +65,6 @@ class SAASOperator(models.Model):
         return cluster.drop_db(db_name)
 
     def _install_modules(self, db_name, modules):
-        db_name = db_name + '.' + self.domain_build
         if self.type != 'local':
             raise NotImplementedError()
 
@@ -82,7 +79,6 @@ class SAASOperator(models.Model):
         self.with_delay().post_init(template_id, template_operator_id)
 
     def _post_init(self, db_name, template_post_init):
-        db_name = db_name + '.' + self.domain_build
         if self.type != 'local':
             raise NotImplementedError()
 

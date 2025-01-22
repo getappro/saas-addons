@@ -29,12 +29,10 @@ class SAASDB(models.Model):
         self.ensure_one()
         db_name = self.name
         self.operator_id._create_db(template_db, db_name, demo, lang)
-        self.name = db_name + '.' + self.operator_id.domain_build
         self.state = 'done'
         self.env['saas.log'].log_db_created(self)
         if callback_obj and callback_method:
             getattr(callback_obj, callback_method)()
-
 
     def drop_db(self):
         for r in self:
@@ -62,7 +60,7 @@ class SAASDB(models.Model):
         return res
 
     def refresh_data(self, should_read_from_build=True, should_write_to_build=True):
-        self.env.cr.commit()
+        self.env.cr.flush()
         for record in self.filtered(lambda record: (record.type, record.state) == ("build", "done")).with_context(writing_from_refresh_data=True):
             if should_read_from_build:
                 vals = record.read_values_from_build()

@@ -9,6 +9,7 @@ import os
 import re
 import string
 import threading
+from functools import wraps
 
 from odoo import SUPERUSER_ID, api, registry, sql_db, tools
 from odoo.service import db
@@ -22,6 +23,12 @@ BACKUP_DIR = tools.config["data_dir"] + "/backups"
 if not os.path.exists(BACKUP_DIR):
     os.mkdir(BACKUP_DIR)
 
+# Définir le décorateur check au début du fichier
+def check(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        return f(*args, **kwargs)
+    return wrapper
 
 def full_backup_path(backup_name):
     return BACKUP_DIR + "/" + backup_name
@@ -168,9 +175,19 @@ def signal_changes(db_name):
 # cluster requires all methods to be executed
 # It is expected, that master password check will protect
 # from unauthorized usage
-# @check
+@check
 def execute(db, uid, obj, method, *args, **kw):
-    threading.current_thread().dbname = db
+    threading.currentThread().dbname = db
+    with registry(db).cursor() as cr:
+        res = execute_cr(cr, uid, obj, method, *args, **kw)
+        if res is None:
+            _logger.info('The method %s of the object %s can not return `None` !', method, obj)
+        return res
+
+
+@check  # Maintenant le décorateur peut être utilisé
+def execute(db, uid, obj, method, *args, **kw):
+    threading.currentThread().dbname = db
     with registry(db).cursor() as cr:
         res = execute_cr(cr, uid, obj, method, *args, **kw)
         if res is None:
