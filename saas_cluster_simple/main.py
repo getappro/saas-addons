@@ -187,7 +187,7 @@ def execute(db, uid, obj, method, *args, **kw):
 
 @check  # Maintenant le décorateur peut être utilisé
 def execute(db, uid, obj, method, *args, **kw):
-    threading.currentThread().dbname = db
+    threading.current_thread().dbname = db
     with registry(db).cursor() as cr:
         res = execute_cr(cr, uid, obj, method, *args, **kw)
         if res is None:
