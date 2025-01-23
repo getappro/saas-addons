@@ -21,7 +21,7 @@
                     <button
                         name="action_restore"
                         string="Restore backup"
-                        attrs="{'invisible': [('remote_filename', '=', False)]}"
+                        invisible="remote_filename in ['False']"
                         type="object"
                     />
                 </header>
@@ -38,7 +38,7 @@
                             name="action_show_restored_builds"
                             type="object"
                             icon="fa-list"
-                            attrs="{'invisible': [('restored_build_count', '=', 0)]}"
+                            invisible="restored_build_count in ['0']"
                         >
                             <field string="Restored builds" name="restored_build_count" widget="statinfo"/>
                         </button>
