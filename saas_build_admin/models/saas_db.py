@@ -61,9 +61,9 @@ class SaasDb(models.Model):
         vals["name"] = self.admin_user.name
         vals["password"] = password
 
-        _, model, res_id = self.xmlid_lookup("base.user_admin")
-
-        self.execute_kw(model, "write", res_id, vals)
+        admin_user = self.env.ref("base.user_admin")
+        # Puis utilisez admin_user.id comme res_id
+        self.execute_kw(admin_user._name, "write", admin_user.id, vals)
 
         template = self.env.ref("saas_build_admin.template_build_admin_is_set")
         template.with_context(build=self, build_admin_password=password).send_mail(self.admin_user.id, force_send=True, raise_exception=True)
